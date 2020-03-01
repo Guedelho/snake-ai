@@ -37,7 +37,8 @@ class Game(object):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
-                self._on_key_press()
+                elif event.type == pygame.KEYDOWN:
+                    self._on_key_press()
             self._draw_game()
 
     def _draw_game(self):
@@ -58,11 +59,11 @@ class Game(object):
         for key in keys:
             if keys[pygame.K_LEFT]:
                 self._snake.update_direction(-1, 0)
-            elif keys[pygame.K_RIGHT]:
+            if keys[pygame.K_RIGHT]:
                 self._snake.update_direction(1, 0)
-            elif keys[pygame.K_UP]:
+            if keys[pygame.K_UP]:
                 self._snake.update_direction(0, -1)
-            elif keys[pygame.K_DOWN]:
+            if keys[pygame.K_DOWN]:
                 self._snake.update_direction(0, 1)
 
     def run(self):
