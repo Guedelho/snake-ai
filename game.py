@@ -59,11 +59,11 @@ class Game(object):
         for key in keys:
             if keys[pygame.K_LEFT]:
                 self._snake.update_direction(-1, 0)
-            if keys[pygame.K_RIGHT]:
+            elif keys[pygame.K_RIGHT]:
                 self._snake.update_direction(1, 0)
-            if keys[pygame.K_UP]:
+            elif keys[pygame.K_UP]:
                 self._snake.update_direction(0, -1)
-            if keys[pygame.K_DOWN]:
+            elif keys[pygame.K_DOWN]:
                 self._snake.update_direction(0, 1)
 
     def run(self):

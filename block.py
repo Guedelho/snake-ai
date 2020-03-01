@@ -14,6 +14,6 @@ class Block(object):
         y = self.position[1]
 
         pygame.draw.rect(self._surface, self._color, (x*self._block_size,
-                                                    y*self._block_size,
-                                                    self._block_size,
-                                                    self._block_size))
+                                                      y*self._block_size,
+                                                      self._block_size,
+                                                      self._block_size))
