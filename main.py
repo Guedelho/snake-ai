@@ -5,9 +5,9 @@ from game import Game
 def main():
     rows = 20
     size = 400
-    tick_rate = 10
+    fps = 30
 
-    game = Game(size, rows, tick_rate)
+    game = Game(size, rows, fps)
     game.run()
 
 

@@ -1,7 +1,7 @@
 import pygame
 
 from block import Block
-from const import UP, DOWN, LEFT, RIGHT
+from constants import UP, DOWN, LEFT, RIGHT
 
 
 class Snake(object):

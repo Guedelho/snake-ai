@@ -3,7 +3,7 @@ import random
 
 from block import Block
 from snake import Snake
-from const import UP, DOWN, LEFT, RIGHT
+from constants import UP, DOWN, LEFT, RIGHT
 
 
 class Game(object):
@@ -14,10 +14,10 @@ class Game(object):
     _surface_color = pygame.Color(0, 0, 0)  # Black
     _score_color = pygame.Color(255, 255, 255)  # White
 
-    def __init__(self, size, rows, tick_rate):
+    def __init__(self, size, rows, fps):
+        self._fps = fps
         self._size = size
         self._rows = rows
-        self._tick_rate = tick_rate
         self._block_size = size // rows
         self._surface = pygame.display.set_mode((self._size, self._size))
 
@@ -35,7 +35,7 @@ class Game(object):
     def _loop(self):
         clock = pygame.time.Clock()
         while self._running:
-            clock.tick(self._tick_rate)
+            clock.tick(self._fps)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self._game_over()
@@ -87,7 +87,8 @@ class Game(object):
 
     def _show_score(self):
         score_font = pygame.font.SysFont('consolas', 20)
-        score_surface = score_font.render('Score : ' + str(self._score), True, self._score_color)
+        score_surface = score_font.render(
+            'Score : ' + str(self._score), True, self._score_color)
         score_rect = score_surface.get_rect()
         score_rect.midtop = (self._size/10, 15)
         self._surface.blit(score_surface, score_rect)
