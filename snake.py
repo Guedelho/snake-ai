@@ -42,7 +42,9 @@ class Snake(object):
     def get_head_position(self):
         return self._body[0].get_position()
 
+    def get_body_positions(self):
+        return [block.get_position() for block in self._body[1:]]
+
     def draw(self):
-        print([block.get_position() for block in self._body])
         for block in self._body:
             block.draw()
