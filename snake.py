@@ -1,66 +1,48 @@
 import pygame
 
 from block import Block
+from const import UP, DOWN, LEFT, RIGHT
 
 
 class Snake(object):
-    _body = []
-    _turns = {}
+    _direction = RIGHT
 
     def __init__(self, surface, color, position, block_size):
         self._color = color
-        self.head = Block(surface, color, position, block_size)
-        self._body.append(self.head)
         self._surface = surface
         self._block_size = block_size
+        self._body = [Block(surface, color, position, block_size)]
 
-    def _move(self, block):
-        x, y = block.position
-        dir_x, dir_y = block.direction
-        block.position = (x + dir_x, y + dir_y)
-        return block
+    def update_direction(self, new_direction):
+        if new_direction == UP and self._direction != DOWN:
+            self._direction = UP
+        elif new_direction == DOWN and self._direction != UP:
+            self._direction = DOWN
+        elif new_direction == LEFT and self._direction != RIGHT:
+            self._direction = LEFT
+        elif new_direction == RIGHT and self._direction != LEFT:
+            self._direction = RIGHT
 
-    def add_block(self):
-        position = ()
-        tail = self._body[-1]
-        x, y = tail.position
-        dir_x, dir_y = tail.direction
+    def update_position(self, food=False):
+        x, y = self._body[0].get_position()
+        new_position = []
+        if self._direction == UP:
+            new_position = [x, y-1]
+        elif self._direction == DOWN:
+            new_position = [x, y+1]
+        elif self._direction == LEFT:
+            new_position = [x-1, y]
+        elif self._direction == RIGHT:
+            new_position = [x+1, y]
+        self._body.insert(0, Block(self._surface, self._color,
+                                   new_position, self._block_size))
+        if not food:
+            self._body.pop()
 
-        if dir_x == 1 and dir_y == 0:
-            position = (x-1, y)
-        elif dir_x == -1 and dir_y == 0:
-            position = (x+1, y)
-        elif dir_x == 0 and dir_y == 1:
-            position = (x, y-1)
-        elif dir_x == 0 and dir_y == -1:
-            position = (x, y+1)
-
-        self._body.append(Block(self._surface, self._color,
-                                position, self._block_size, (dir_x, dir_y)))
-
-    def update_direction(self, new_dir_x, new_dir_y):
-        dir_x, dir_y = self.head.direction
-        if dir_x + new_dir_x != 0 or dir_y + new_dir_y != 0:
-            self.head.direction = (new_dir_x, new_dir_y)
-            self._turns[self.head.position] = (dir_x, dir_y)
-            print(self._turns)
+    def get_head_position(self):
+        return self._body[0].get_position()
 
     def draw(self):
-        for i, block in enumerate(self._body):
-            x, y = position = block.position
-            dir_x, dir_y = block.direction
-
-            if position in self._turns:
-                block.direction = self._turns[position]
-                if i == len(self._body)-1:
-                    self._turns.pop(position)
-            else:
-                if dir_x == -1 and x <= 0:
-                    block.position = (self._block_size, y)
-                elif dir_x == 1 and x > self._block_size-1:
-                    block.position = (-1, y)
-                elif dir_y == 1 and y > self._block_size-1:
-                    block.position = (x, -1)
-                elif dir_y == -1 and y <= 0:
-                    block.position = (x, self._block_size)
-            self._move(block).draw()
+        print([block.get_position() for block in self._body])
+        for block in self._body:
+            block.draw()
