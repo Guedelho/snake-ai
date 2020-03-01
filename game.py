@@ -53,13 +53,13 @@ class Game(object):
         else:
             self._snake.update_position()
 
-    def _wall_collision(self):
+    def _has_hit_the_wall(self):
         snake_head_position_x, snake_head_position_y = self._snake.get_head_position()
         if snake_head_position_x < 0 or snake_head_position_x > self._rows or snake_head_position_y < 0 or snake_head_position_y > self._rows:
             return True
         return False
 
-    def _body_collision(self):
+    def _has_hit_the_body(self):
         snake_head_position = self._snake.get_head_position()
         snake_body_positions = self._snake.get_body_positions()
         if snake_head_position in snake_body_positions:
@@ -77,7 +77,7 @@ class Game(object):
             self._snake.update_direction(RIGHT)
 
     def _draw_game(self):
-        if not self._body_collision() and not self._wall_collision():
+        if not self._has_hit_the_body() and not self._has_hit_the_wall():
             self._surface.fill(self._surface_color)
             self._food.draw()
             self._snake.draw()
