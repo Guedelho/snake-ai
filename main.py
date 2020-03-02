@@ -3,9 +3,9 @@ from game import Game
 
 
 def main():
-    rows = 20
-    size = 400
-    fps = 30
+    rows = 30
+    size = 600
+    fps = 20
 
     game = Game(size, rows, fps)
     game.run()

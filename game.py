@@ -9,10 +9,10 @@ from constants import UP, DOWN, LEFT, RIGHT
 class Game(object):
     _score = 0
     _running = True
-    _food_color = pygame.Color(255, 0, 0)  # Red
-    _snake_color = pygame.Color(0, 255, 0)  # Green
-    _surface_color = pygame.Color(0, 0, 0)  # Black
-    _score_color = pygame.Color(255, 255, 255)  # White
+    _red = pygame.Color(255, 0, 0)
+    _black = pygame.Color(0, 0, 0)
+    _green = pygame.Color(0, 255, 0)
+    _white = pygame.Color(255, 255, 255)
 
     def __init__(self, size, rows, fps):
         self._fps = fps
@@ -24,12 +24,12 @@ class Game(object):
     def _create_food(self):
         position = [random.randrange(self._block_size),
                     random.randrange(self._block_size)]
-        self._food = Block(self._surface, self._food_color,
+        self._food = Block(self._surface, self._red,
                            position, self._block_size)
 
     def _create_snake(self):
         position = [5, 10]
-        self._snake = Snake(self._surface, self._snake_color,
+        self._snake = Snake(self._surface, self._green,
                             position, self._block_size)
 
     def _loop(self):
@@ -54,8 +54,8 @@ class Game(object):
             self._snake.update_position()
 
     def _has_hit_the_wall(self):
-        snake_head_position_x, snake_head_position_y = self._snake.get_head_position()
-        if snake_head_position_x < 0 or snake_head_position_x > self._rows or snake_head_position_y < 0 or snake_head_position_y > self._rows:
+        x, y = self._snake.get_head_position()
+        if x < 0 or x > self._rows or y < 0 or y > self._rows:
             return True
         return False
 
@@ -78,20 +78,35 @@ class Game(object):
 
     def _draw_game(self):
         if not self._has_hit_the_body() and not self._has_hit_the_wall():
-            self._surface.fill(self._surface_color)
+            self._surface.fill(self._black)
             self._food.draw()
             self._snake.draw()
             self._food_collision()
             self._show_score()
             pygame.display.update()
+        else:
+            self._game_over()
 
-    def _show_score(self):
-        score_font = pygame.font.SysFont('consolas', 20)
+    def _show_score(self, is_game_over=False):
+        score_font = pygame.font.SysFont('times', 30)
         score_surface = score_font.render(
-            'Score : ' + str(self._score), True, self._score_color)
+            'Score : ' + str(self._score), True, self._white)
         score_rect = score_surface.get_rect()
-        score_rect.midtop = (self._size/10, 15)
+        if not is_game_over:
+            score_rect.midtop = (self._size/10, 15)
+        else:
+            score_rect.midtop = (self._size/2, self._size/2)
         self._surface.blit(score_surface, score_rect)
+
+    def _game_over(self):
+        my_font = pygame.font.SysFont('times new roman', 90)
+        game_over_surface = my_font.render('GAME OVER', True, self._white)
+        game_over_rect = game_over_surface.get_rect()
+        game_over_rect.midtop = (self._size/2, self._size/4)
+        self._surface.fill(self._black)
+        self._surface.blit(game_over_surface, game_over_rect)
+        self._show_score(True)
+        pygame.display.flip()
 
     def run(self):
         pygame.init()
