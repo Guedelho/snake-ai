@@ -5,11 +5,11 @@ from constants import UP, DOWN, LEFT, RIGHT
 
 
 class Snake(object):
-    _direction = RIGHT
 
     def __init__(self, surface, color, position, block_size):
         self._color = color
         self._surface = surface
+        self._direction = RIGHT
         self._block_size = block_size
         self._body = [Block(surface, color, position, block_size)]
 
